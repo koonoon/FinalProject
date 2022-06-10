@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table>
+    <tr>
+       <th>가수 이름</th>
+        <th>음악 이름</th>
+        <th>음악 장르</th>
+        <th>게시일</th>
+        <th>조회 수</th>
+        <th>좋아요 수</th>
+        <th>가격</th>
+    </tr>
+    <tr th:each="list : ${upList}">
+    <td th:text="${list.muSinger}"></td>
+        <td><a th:href="@{musicView(muCode=${list.muCode})}" th:text="${list.muName}" id="audio"></a></td>
+        <td th:text="${list.muGanre}"></td>
+        <td th:text="${list.muDate}"></td>
+        <td th:text="${list.muHit}"></td>
+        <td th:text="${list.muLike}"></td>
+        <td th:text="${list.muPrice}"></td>
+      
+        
+    </tr>
+    
+</table>
+</body>
+</html>

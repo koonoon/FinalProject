@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.musicwired.dao.uploadDao">
+
+    <insert id="fileUpload" parameterType="audio">
+        INSERT INTO MUSIC
+        VALUES (MUSIC_SEQ.NEXTVAL, #{muSinger}, #{muName}, #{muGanre},
+                SYSDATE, #{muImage}, #{muLyrics},
+                0, 0, 0, #{mFile},0)
+    </insert>
+    <select id="fileList" resultType="audio">
+        SELECT *
+        FROM MUSIC
+    </select>
+    <select id="musicView" parameterType="int" resultType="audio">
+        SELECT *
+        FROM MUSIC
+        WHERE MUCODE = #{muCode}
+    </select>
+    <update id="fileModify" parameterType="audio">
+        UPDATE MUSIC
+        SET MUNAME   =#{muName},
+            MUGANRE  =#{muGanre},
+            MUIMAGE  =#{muImage},
+            MULYRICS =#{muLyrics},
+            MUPRICE  =#{muPrice},
+            MFILE    =#{mFile}
+        WHERE MUCODE = #{muCode}
+    </update>
+    <delete id="fileDelete" parameterType="int">
+        DELETE
+        FROM MUSIC
+        WHERE MUCODE = #{muCode}
+    </delete>
+
+    <update id="muCount" parameterType="int">
+        UPDATE MUSIC
+        SET MUHIT = MUHIT + 1
+        WHERE MUCODE = #{muCode}
+    </update>
+
+    <select id="LikeList" parameterType="int" resultType="audio">
+        SELECT *
+        FROM MUSIC
+        WHERE MUCODE = #{muCode}
+    </select>
+    <update id="LikeUp" parameterType="int">
+    UPDATE MUSIC SET MULIKE = MULIKE +1, HEARTIMG = +1 WHERE MUCODE =#{muCode}
+    </update>
+    <select id="LikeCheck" parameterType="int" resultType="audio">
+        SELECT *
+        FROM MUSIC
+        WHERE MUCODE = #{muCode}
+    </select>
+    <update id="LikeDown" parameterType="int">
+        UPDATE MUSIC SET MULIKE = MULIKE -1,HEARTIMG = -1 WHERE MUCODE =#{muCode}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="kooky"/>
+	<meta name="description" content="Spring Boot Member View"/>
+	<meta name="date" content="2022.05.25">
+	<title>Spring Boot Member View</title>
+</head>
+<body>
+	<table>
+		<caption>임시비밀번호 발급</caption>
+		<tr>
+			<th>임시비밀번호</th>
+			<td th:text="${reset}"></td>
+		</tr>
+		
+		<tr>
+		<td colspan="2">
+		<input type="button" id="login_button" onclick="location.href='memberLogin'" value="로그인창으로 이동"/>
+		</td>
+	</tr>
+		
+		
+		
+		
+		
+	</table>
+		
+	
+</body>
+</html>
