@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.icia.musicwired.dto.pagingDto;
 import com.icia.musicwired.dto.uploadDto;
 
 @Mapper
@@ -11,10 +12,7 @@ public interface uploadDao {
 	
     int fileUpload(uploadDto dto);
     
-	List<uploadDto> fileList();
-
-	uploadDto musicView(int muCode);
-
+    List<uploadDto> fileList(pagingDto paging);
 
 	int fileModify(uploadDto dto);
 
@@ -29,4 +27,10 @@ public interface uploadDao {
 	List<uploadDto> LikeCheck(int muCode);
 
 	int LikeDown(int muCode);
+
+	uploadDto muView(int muCode);
+
+	int muListCount();
+
+	
 }

@@ -12,8 +12,7 @@
 			<th>비밀번호</th>
 			<th>이름</th>
 			<th>이메일</th>
-			
-			<th>수정</th>
+			<th>성별</th>
 			<th>삭제</th>
 		</tr>
 		<!-- 
@@ -27,9 +26,7 @@
 			<td th:text="${list.mName}"></td>
 			<td th:text="${list.mEmail}"></td>
 			<td th:text="${list.mGender}"></td>
-			
-			
-			<td><a th:href="@{mDelete(mId=${list.mId})}" th:text="'삭제'"></a></td>
+			<td><a th:href="@{memberDelete(mId=${list.mId})}" th:text="'삭제'"></a></td>
 		</tr>
 	</table>
 </body>

@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private PasswordEncoder pwEnc;
 	
-	@Autowired
-	private JavaMailSender mailsender;
+//	@Autowired
+//	private JavaMailSender mailsender;
 
 	@Override
 	public ModelAndView memberJoin(MemberDTO member) throws IllegalStateException, IOException {
@@ -72,16 +72,14 @@ public class MemberServiceImpl implements MemberService{
 		String ePw = mdao.mEpw(member.getmId());
 		System.out.println(member);
 		if(pwEnc.matches(member.getmPw(), ePw)) {
-			
 			MemberDTO loginMember = mdao.memberView(member.getmId());
 			session.setAttribute("login", loginMember);
-			mav.setViewName("redirect:/index");
+			mav.setViewName("index");
 		} else {
 			session.invalidate();
 			mav.addObject("error", "아이디/비밀번호가 틀립니다.");
 			mav.setViewName("Mem_Login");
 		}
-		
 		System.out.println(member);
 		System.out.println(mav);
 		return mav;
@@ -156,7 +154,6 @@ public class MemberServiceImpl implements MemberService{
 		System.out.println("2"+mId);
 		int result = mdao.memberDelete(mId);
 		System.out.println("4"+result);
-		
 		if(result>0) {
 			mav.setViewName("index");
 		} else {

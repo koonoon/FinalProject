@@ -10,9 +10,9 @@ import com.icia.musicwired.dto.uploadDto;
 public interface uploadService {
     ModelAndView fileUpload(uploadDto dto) throws IOException;
 
-	ModelAndView fileList();
+	ModelAndView fileList(int page, int limit);
 
-	ModelAndView musicView(int muCode);
+	ModelAndView muView(int muCode);
 
 	//수정페이지이동
 	ModelAndView fileModiForm(int muCode);

@@ -10,15 +10,17 @@
                 SYSDATE, #{muImage}, #{muLyrics},
                 0, 0, 0, #{mFile},0)
     </insert>
-    <select id="fileList" resultType="audio">
-        SELECT *
-        FROM MUSIC
-    </select>
-    <select id="musicView" parameterType="int" resultType="audio">
+	<select id="fileList" resultType="audio">
+		SELECT * FROM PAGING WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+    <select id="muView" parameterType="int" resultType="audio">
         SELECT *
         FROM MUSIC
         WHERE MUCODE = #{muCode}
     </select>
+    	 <select id="muListCount" resultType="int">
+		SELECT COUNT(*) FROM MUSIC  
+	</select>
     <update id="fileModify" parameterType="audio">
         UPDATE MUSIC
         SET MUNAME   =#{muName},

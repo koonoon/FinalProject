@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<!--<script th:if="${session.login.mId eq null}">-->
+<!--    alert('로그인 이후 이용해주세요.');-->
+<!--    location.href = "memberLogin";-->
+<!--</script>-->
 <body>
 <form ACTION="fileUpload" METHOD="POST" ENCTYPE="multipart/form-data">
     가수 이름 : <input type="text" name="muSinger"><br/>
@@ -15,8 +19,7 @@
     포스터 : <input type="file" name="mImage"><br/>
     <input type="submit" value="등록"><br/>
     <input type="reset" value="다시작성">
-
 </form>
-
 </body>
+
 </html>

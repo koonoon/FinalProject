@@ -46,9 +46,7 @@ public class MemberController {
 		mav = msvc.memberJoin(member);
 		return mav;
 	}
-	
-	
-	
+
 	// memberLogin 
 	@RequestMapping(value="/memberLogin", method=RequestMethod.GET)
 	public String memberLogin() {
