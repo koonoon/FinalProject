@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+.notification-container {
+  background: rgba(0,0,0,.3);
+  border-radius: 10px;
+  padding: 15px 20px;
+  position: absolute;
+  bottom: 50px;
+  display: none;
+}
+
+.notification-container.show {
+display: flex;
+}
+		*{
+			margin:0;
+			padding:0;
+		}
+		.container{
+			width: 500px;
+			margin: 0 auto;
+			padding: 25px
+		}
+		.container h1{
+			text-align: left;
+			padding: 5px 5px 5px 15px;
+			color: rgb(0, 0, 255);
+			border-left: 3px solid rgb(0, 0, 255);
+			margin-bottom: 20px;
+		}
+		.chating{
+			background-color: rgb(100,149,237);
+			width: 700px;
+			height: 700px;
+			overflow: auto;
+			font-size: 20px;
+		}
+		  
+		.chating p{
+			color: #fff;
+			text-align: left;
+		}
+		input{
+			width: 330px;
+			height: 25px;
+		}
+		
+		.chating .me{
+			color: #F6F6F6;
+			text-align: right;
+		}
+		.chating .others{
+			color: #FFE400;
+			text-align: left;
+		}
+		#csDate{
+		font-size: 15px;
+		}
+		#csDate1{
+		font-size: 15px;
+		color: #FFE400;
+		}
+	</style>
+</head>
+
+<script type="text/javascript">
+	var ws;
+	
+
+	 $(document).ready(function(){
+	
+		 wsOpen();
+		
+		 
+	});
+	
+	function wsOpen(){
+
+		//웹소켓 전송시 현재 방의 번호를 넘겨서 보낸다.
+	
+		ws = new WebSocket("ws://" + location.host + "/chating/"+$("#roomNumber").val());
+	
+		wsEvt();
+		
+
+		document.getElementById('chating').scrollTop = document.getElementById('chating').scrollHeight;
+		
+	}
+
+
+	
+	function wsEvt() {
+		ws.onopen = function(data){
+			//소켓이 열리면 동작
+		}
+		
+		
+		
+		ws.onmessage = function(data) {
+			//메시지를 받으면 동작
+			var msg = data.data;
+			if(msg != null && msg.trim() != ''){
+				  
+				};	
+				var d = JSON.parse(msg);
+				/* if(d.type == "getId"){
+					var si = d.sessionId != null ? d.sessionId : "";
+					if(si != ''){
+						$("#sessionId").val(si);
+					}
+				}else */ if(d.type == "message"){
+					if(d.userName == $("#loginId").val()){
+						$("#chating").append("<p class='me'>" + $("#loginId").val() + ": "+ d.msg + "<p id='csDate' class='me'>" + d.date + "</p></p>");	
+					
+					
+					}if(d.userName !== $("#loginId").val()){
+						$("#chating").append("<p class='others'>" + d.userName + ": " + d.msg + "<p id='csDate1' class='others'>" + d.date + "</p></p>");
+					}
+						
+				}else{
+					console.warn("unknown type!")
+				}
+				document.getElementById('chating').scrollTop = document.getElementById('chating').scrollHeight;
+			}
+		
+		}
+		
+		document.addEventListener("keypress", function(e){
+			if(e.keyCode == 13){ //enter press
+				send();
+			}
+		});      
+	
+
+	function send() {
+		var option ={
+			type: "message",
+			roomNumber: $("#roomNumber").val(),
+			sessionId : $("#sessionId").val(),
+			userName : $("#loginId").val(),
+			msg : $("#chatting").val(),
+			date : new Date(+new Date() + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, '').substring(0,16)
+
+		}
+	
+		ws.send(JSON.stringify(option));
+	 	
+
+		$.ajax({
+	
+			type : "POST",
+			url : "/chatSave", 
+			data : {"csNum" : $("#roomNumber").val(), 
+				"csId" : $("#loginId").val(),
+				"csContent" : $("#chatting").val()
+				},
+			dataType : "json",
+			success : function(){
+				
+			},
+			error : function(){
+			
+			}
+	
+		});
+	
+		$('#chatting').val("");
+		
+	
+		
+	
+		
+		
+	}
+	
+
+
+	
+</script>
+
+<body>
+
+	<div id="container" class="container">
+		<h1 th:text="${crdto.crId} +님+' '+채팅방"></h1>
+	
+		<input th:type="hidden" th:id="roomNumber" th:value="${crdto.crNum}">
+	<!-- 	<input type="hidden" id="sessionId" value=""> -->
+	
+		<div id="chating" class="chating">
+		<div th:each='csdto:${csdto}'>
+	
+		<p th:if="${csdto.csId eq session.login.mId}" class='me'  th:text="${csdto.csId}+': '+${csdto.csContent}+''"><p id="csDate" 
+		th:if="${csdto.csId eq session.login.mId}" class='me'  th:text="${#dates.format(csdto.csDate, 'yyyy-MM-dd HH:mm')}"></p></p>
+	
+
+		<p th:if="${csdto.csId ne session.login.mId}" class='others'  th:text="${csdto.csId}+': '+${csdto.csContent}"><p id="csDate1" 
+		th:if="${csdto.csId ne session.login.mId}"  class='others'  th:text="${#dates.format(csdto.csDate, 'yyyy-MM-dd HH:mm')}"></p></p>
+	
+		</div>
+		
+		</div>
+		
+		<div id="yourMsg">
+			<table class="inputTable">
+				<tr>
+				
+					<th>메시지</th>
+					<th><input id="chatting" placeholder="보내실 메시지를 입력하세요."></th>
+					<th><button onclick="send()" id="sendBtn">보내기</button></th>
+					<th><input th:type="hidden" th:value="${session.login.mId}" th:id="loginId"/>
+				
+				</tr>
+			</table>
+		</div>
+	</div>  
+	
+	  
+
+</body>
+</html>
+

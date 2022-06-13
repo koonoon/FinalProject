@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+<meta name="description" content="">
+<meta name="date" content="">
+<title></title>
+<style>
+table, tr, td, th {
+	border: 1px solid;
+	border-collapse: collapse;
+	padding: 10px;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<form action="boardModify" method="POST" enctype="multipart/form-data">
+		<table>
+			<caption>게시글 수정</caption>
+
+			<tr>
+				<th>작성자</th>
+				<td th:text="${modi.boWriter}">
+				</td>
+			</tr>
+
+			<tr>
+				<th>제목</th>
+				<td><input type="text" name="boTitle" />
+				<input type="hidden" name="boWriter" th:value="${modi.boWriter}"/>
+				<input type="hidden" name="boCode" th:value="${modi.boCode}"/>
+				</td>
+			</tr>
+
+			<tr>
+				<th>내용</th>
+				<td><textarea rows="20" cols="40" name="boContent"></textarea></td>
+			</tr>
+
+			<tr>
+				<th>첨부파일</th>
+				<td><input type="file" name="boImageFile" /></td>
+			</tr>
+
+			<tr>
+				<td colspan="2"><input type="submit" value="수정" /> <input
+					type="reset" value="다시작성" /></td>
+			</tr>
+
+		</table>
+	</form>
+</body>
+</html>

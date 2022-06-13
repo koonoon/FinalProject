@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<table>
+    <tr>
+       <th>가수 이름</th>
+        <th>음악 이름</th>
+        <th>음악 장르</th>
+        <th>게시일</th>
+        <th>조회 수</th>
+        <th>좋아요 수</th>
+        <th>가격</th>
+    </tr>
+    <tr th:each="list : ${upList}">
+    <td th:text="${list.muSinger}"></td>
+        <td><a th:href="@{muView(muCode=${list.muCode})}" th:text="${list.muName}" id="audio"></a></td>
+        <td th:text="${list.muGanre}"></td>
+        <td th:text="${list.muDate}"></td>
+        <td th:text="${list.muHit}"></td>
+        <td th:text="${list.muLike}"></td>
+        <td th:text="${list.muPrice}"></td>
+      
+        
+    </tr>
+    
+</table>
+<code th:if="${paging.page <= 1}" th:text="이전"></code>
+        <code th:if="${paging.page > 1}">
+            <a th:href="@{fileList(page=${paging.page-1},limit=${paging.limit})}" th:text="이전"></a>
+        </code>
+
+ 
+        <th:block th:each="i : ${#numbers.sequence(paging.startPage , paging.endPage)}">
+          <code  th:if= "${paging.page eq i}" th:text="${i}"></code>
+            <a th:unless="${paging.page eq i}" th:href="@{fileList(page=${i},limit=${paging.limit})}" ><code th:text="${i}"></code></a>
+		 </th:block>
+		<code th:if="${paging.page >= paging.maxPage}" th:text="다음"></code>
+      <code th:if="${paging.page < paging.maxPage}">
+            <a th:href="@{fileList(page=${paging.page+1},limit=${paging.limit})}" th:text="다음"></a>
+        </code> 
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+	<title>CRList</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.container{
+			width: 900px;
+			margin: 0 auto;
+			padding: 25px
+		}
+		.container h1{
+			text-align: left;
+			padding: 5px 5px 5px 15px;
+			color: #FFBB00;
+			border-left: 3px solid #FFBB00;
+			margin-bottom: 20px;
+		}
+		.roomContainer{
+			background-color: #F6F6F6;
+			width: 900px;
+			height: 500px;
+			overflow: auto;
+		}
+		
+		.roomList.th{
+			border: 1px solid #FFBB00;
+			background-color: #fff;
+			color: #FFBB00;
+			font-size: 20px;
+		}
+		.roomList.td{
+			border: 1px solid #FFBB00;
+			background-color: #fff;
+			text-align: left;
+			color: #FFBB00;
+			font-size: 20px;
+		}
+		.num{
+			width: 75px;
+			text-align: center;
+			font-size: 20px;
+		}
+		.room{
+			width: 350px;
+			font-size: 20px;
+		
+		}
+		.read{
+			width: 350px;
+			font-size: 20px;
+			color: blue;
+		}
+		.read1{
+			width: 350px;
+			font-size: 20px;
+			color: red;
+		}
+		.go{
+			width: 71px;
+			text-align: center;
+			font-size: 20px;
+		}
+		button{
+			background-color: #FFBB00;
+			font-size: 20px;
+			color: #000;
+			border: 1px solid #000;
+			border-radius: 5px;
+			padding: 3px;
+			margin: 3px;
+		}
+		.inputTable th{
+			padding: 5px;
+		}
+		.inputTable input{
+			width: 330px;
+			height: 25px;
+		}
+		
+	
+		
+	</style>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<body>
+	<div class="container">
+		<h1>1대1 문의하기</h1>
+		<div id="roomContainer" class="roomContainer">
+		<table id="roomList" class="roomList">
+	
+	
+			<tr>
+				<td>방번호</td>
+				<td>아이디</td>
+				<td>메시지 확인여부</td>
+				<td>채팅하기</td>
+			
+			</tr>
+				<tr th:each="crlist:${crlist}">
+				<td class='num' th:text="${crlist.crNum}" ></td>
+				<td class='room' th:text="${crlist.crId}"></td>
+				<td th:if="${crlist.crRead eq '새메시지'}" class='read1' th:text="${crlist.crRead}"></td>
+				<td th:if="${crlist.crRead eq '읽음'}" class='read' th:text="${crlist.crRead}"></td>
+				<td class='go'><button th:if="${session.login ne null}" th:onclick="crRead([[ ${crlist.crId} ]])">채팅하기</button></td>
+
+			</tr>
+			</table>
+		</div>
+		
+	</div>
+	
+</body>
+<script type="text/javascript">
+function crRead(crId){
+
+	location.href = "moveChating?mId="+crId;
+	
+	$.ajax({
+		
+		type : "POST",
+		url : "/readupdate", 
+		data : {
+			"crId" : crId
+			},
+		dataType : "json",
+		success : function(){
+			
+		},
+		error : function(){
+		
+		}
+
+	});
+
+};
+
+
+
+</script>
+
+</html>

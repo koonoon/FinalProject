@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.musicwired.dao.MDAO">
+		
+	
+	<insert id="createRoom" parameterType="String">
+	 INSERT INTO CHATROOM VALUES(CHATRMNUM_SEQ.NEXTVAL, #{mId},'새메시지')
+	</insert>
+	
+	<select id="getRoom" parameterType="String" resultType="chatRoom">
+		SELECT * FROM CHATROOM WHERE CRID=#{mId} 
+	</select>
+	
+	<select id="chatlist" resultType="chatRoom">
+		SELECT * FROM CHATROOM ORDER BY CRREAD
+	</select>
+	
+	<insert id="chatSave" parameterType="chatSave">
+	 INSERT INTO CHATSAVE VALUES(#{csNum}, #{csContent},SYSDATE,#{csId})
+	</insert>
+	
+	<select id="getSaveChat" parameterType="int" resultType="chatSave">
+		SELECT * FROM CHATSAVE WHERE CSNUM=#{crNum} ORDER BY CSDATE ASC
+	</select>
+	
+	
+	<update id="readupdate" parameterType="chatRoom">
+		UPDATE CHATROOM SET CRREAD='읽음' WHERE CRID=#{crId}
+	</update>
+	
+	<update id="readupdate1" parameterType="int">
+		UPDATE CHATROOM SET CRREAD='새메시지' WHERE CRNUM=#{csNum}
+	</update>
+</mapper>

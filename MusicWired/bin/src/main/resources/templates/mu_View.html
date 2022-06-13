@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+
+<table>
+    <caption>음악 상세보기</caption>
+    <tr>
+        <th>번호</th>
+        <td><input type="hidden" th:value="${muView.muCode}" th:id="muCode" th:text="${muView.muCode}">
+        <td>
+    </tr>
+    <tr>
+        <th>가수</th>
+        <td th:text="${muView.muSinger}">
+        <td>
+    </tr>
+    <tr>
+        <th>음악이름</th>
+        <td th:text="${muView.muName}">
+        <td>
+    </tr>
+    <tr>
+        <th>음악장르</th>
+        <td th:text="${muView.muGanre}">
+        <td>
+    </tr>
+    <tr>
+        <th>등록일</th>
+        <td th:text="${muView.muDate}">
+        <td>
+    </tr>
+    <tr>
+        <th>가사</th>
+        <td th:text="${muView.muLyrics}">
+        <td>
+    </tr>
+    <tr>
+        <th>조회수</th>
+        <td th:text="${muView.muHit}">
+        <td>
+    </tr>
+    <tr>
+    <tr>
+        <th>가격</th>
+        <td th:text="${muView.muPrice}">
+        <td>
+    </tr>
+    <tr>
+        <th>음악파일</th>
+        <td>
+            <audio controls="controls">
+                <source th:src="@{/audio/{mFile}(mFile=${muView.mFile})}" style="width:200px;" type="audio/mpeg">
+            </audio>
+        <td>
+    </tr>
+    <tr>
+        <th>이미지</th>
+        <td><img th:src="@{/muImage/{muImage}(muImage=${muView.muImage})}" style="width:200px;"/>
+        <td>
+    </tr>
+    <!--        <tr>-->
+    <!--            <th>좋아요</th>-->
+    <!--            <td><a th:onclick="|javascript:likeup('${muView.muCode}')|"><img th:src="@{/Like/heart1.png}"-->
+    <!--                                                                             style="width:10px;"-->
+    <!--                                                                             th:name="${muView.muLike}"/></a>-->
+    <!--            <td>-->
+    <!--        </tr>-->
+    <tr>
+        <td><a th:href="@{fileModiForm(muCode=${muView.muCode})}">
+            <button type="button">수정</button>
+        </a>
+            <a th:href="@{fileDelete(muCode=${muView.muCode})}">
+                <button type="button">삭제</button>
+            </a></td>
+    </tr>
+
+</table>
+<input type="hidden" th:value="${muView.muLike}" th:id="muLike">
+<div th:id="LikeArea"></div>
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script th:inline="javascript">
+    $(document).ready(function () { //페이지 실행시 좋아요 ajax가 실행되도록 ready 안에서 함수 실행
+        var muCode = $("#muCode").val(); //음악 코드 가져옴
+        console.log('muCode :' + muCode);
+
+        $.ajax({
+            type: "GET",
+            url: "Like",
+            data: {
+                "muCode": muCode
+            },
+            dataType: "json",
+            success: function (like) {
+
+                LikeList(like);
+            },
+            error: function () {
+                alert('파이팅!!');
+            }
+        });
+    });
+
+    //좋아요 +1 / -1 함수 실행
+    function LikeList(good) {
+        console.log(good);
+        var muLike = $('#muLike').val(); //dto에 있는 좋아요 필드인 mulike의 아이디 값을 가져옴.
+        var output = "";
+        output += "<table>";
+        output += "<tr>";
+        output += "<th ></th>";
+        output += "</tr>";
+
+        for (var i in good) {
+            output += "<tr>";
+            output += "<th id='" + good[i].muCode + "' class='heartUp'><img src='/heart/heart1.png' style='width: 25px;' id='muLike'/><span>" + good[i].muLike + "</span></th>";
+            //아이디는 음악 코드 값을 가져온다. 이미지를 가져오고 출력되는 내용은 mulike 이다.
+            output += "</tr>";
+        }
+        output += "</table>";
+        var LikeArea = document.getElementById('LikeArea');
+        LikeArea.innerHTML = output;// likeArea div에 위 내용들을 출력해준다.
+
+        //좋아요 개 수 올라가는 ajax 실행
+        $(".heartUp").click(function () {
+            var muCode = $(this).attr('id'); //attr 은 아이디값을 가져오는 명령.
+
+            console.log("muCode:" + muCode);
+            $.ajax({
+                type: "POST",
+                url: "LikeUp",
+                data: {
+                    "muCode": muCode
+                },
+                dataType: "json",
+                success: function (list) {
+
+                    LikePlus(list); //하트를 누를 시 muLike 값이 +1 되도록 함.
+                },
+                error: function () {
+                    alert("좋아요 실패");
+                }
+            });
+
+            //muLike가 +1 되는 것이 화면에 출력되도록 하는 함수
+            function LikePlus(list) {
+                console.log("좋아요"+list);
+
+                var muLike = $('#muLike').val();
+                var output = "";
+
+
+                output += "<table>";
+                output += "<tr>";
+                output += "<th ></th>";
+                output += "</tr>";
+                for (var i in list) {
+                    output += "<tr>";
+                    if(list[i].heartImg=1){
+                    output += "<th id='" + list[i].muCode + "' class='heartDown'><img src='/heart/heart2.png' style='width:25px;'/><span>" + list[i].muLike + "</span></th>";
+                    }else{
+                        output += "<th id='" + list[i].muCode + "' class='heartDown'><img src='/heart/heart1.png' style='width:25px;'/><span>" + list[i].muLike + "</span></th>";
+                    }
+                    output += "</tr>";
+                }
+                output += "</table>";
+                var LikeArea = document.getElementById('LikeArea');
+                LikeArea.innerHTML = output;
+
+
+                $(".heartDown").click(function () {
+                    var muCode = $(this).attr('id'); //attr 은 아이디값을 가져오는 명령.
+                    var cancle = true;
+                    console.log("음악코드:" + muCode);
+                    $.ajax({
+                        type: "POST",
+                        url: "LikeDown",
+                        data: {
+                            "muCode": muCode
+                        },
+                        dataType: "json",
+                        success: function (list) {
+                            LikeMinus(list); //하트를 누를 시 muLike 값이 -1 되도록 함.
+                            cancle = false;
+                        },
+                        error: function () {
+                            alert("싫어요 실패");
+                        }
+                    });
+                    function LikeMinus(list){
+                        console.log("마이너스 : "+list);
+                        var muLike = $('#muLike').val();
+                        var output = "";
+
+                        output += "<table>";
+                        output += "<tr>";
+                        output += "<th ></th>";
+                        output += "</tr>";
+                        for (var k in list) {
+                            output += "<tr>";
+                            if(list[i].heartImg=-1){
+                                output += "<th id='" + list[i].muCode + "' class='heartDown'><img src='/heart/heart1.png' style='width:25px;'/><span>" + list[i].muLike + "</span></th>";
+                            }else{
+                                output += "<th id='" + list[i].muCode + "' class='heartDown'><img src='/heart/heart2.png' style='width:25px;'/><span>" + list[i].muLike + "</span></th>";
+                            }
+                            output += "</tr>";
+                        }
+                        output += "</table>";
+                        var LikeArea = document.getElementById('LikeArea');
+                        LikeArea.innerHTML = output;
+                    }
+
+                });
+            }
+
+        });
+
+
+
+    }
+
+
+</script>
+
+
+</html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.musicwired.dao.MusicDAO">
+
+<!-- 게시글 등록 -->
+	<insert id="boardUpload" parameterType="Music">
+		INSERT INTO BOARD VALUES(BOARD_SEQ.NEXTVAL,#{boWriter},#{boTitle},#{boImage, jdbcType=VARCHAR},#{boContent},0,SYSDATE)
+	</insert>
+	
+<!-- 게시글 전체목록 -->
+	<select id="boardList" resultType="Music">
+		SELECT * FROM BOARD ORDER BY BOCODE DESC
+	</select>
+	
+<!-- 게시글 수정페이지 -->
+	<select id="boardModiView" parameterType="int" resultType="Music">
+		SELECT * FROM BOARD WHERE BOCODE = #{boCode}
+	</select>
+	
+<!-- 게시글 수정 메소드 -->
+	<update id="boardModify" parameterType="Music">
+		UPDATE BOARD SET BOTITLE = #{boTitle}, BOIMAGE = #{boImage, jdbcType=VARCHAR}, BOCONTENT = #{boContent} WHERE BOCODE = #{boCode}
+	</update>
+	
+<!-- 게시글 삭제 메소드 -->
+	<delete id="boardDelete" parameterType="int">
+		DELETE FROM BOARD WHERE BOCODE = #{boCode}
+	</delete>
+	
+<!-- 게시글 전체목록(ajax) -->
+	<select id="ajaxBoardList" resultType="Music">
+		SELECT * FROM BOARD ORDER BY BOCODE DESC
+	</select>
+	
+<!-- 좋아요 증가 메소드(ajax) -->
+	<update id="boLikeUp" parameterType="int">
+		UPDATE BOARD SET BOLIKE = BOLIKE + 1 WHERE BOCODE = #{boCdoe}
+	</update>
+	
+<!-- 좋아요 클릭한 게시글 출력용 메소드(ajax) -->
+	<select id="ajaxBoardListSelect" parameterType="int" resultType="Music">
+		SELECT * FROM BOARD WHERE BOCODE = #{boCode}
+	</select>
+	
+<!-- 좋아요 감소 메소드(ajax) -->
+	<update id="boLikeDown" parameterType="int">
+		UPDATE BOARD SET BOLIKE = BOLIKE - 1 WHERE BOCODE = #{boCdoe}
+	</update>
+
+</mapper>

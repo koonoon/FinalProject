@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="author" content="kooky"/>
+	<meta name="description" content="inputBoot index"/>
+	<meta name="date" content="2022.05.25">
+	<title>Spring Boot Member Login</title>
+</head>
+<body>
+<form action="memIdfind" method="POST" >
+<table>
+	<caption>아이디 찾기</caption>
+	
+	
+	<tr>
+		<th>이메일</th>
+		<td><input type="email" name="mEmail" />
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2">
+		<input type="submit" id="find_button" value="제출"/>
+		</td>
+	</tr>
+	
+	
+	</table>
+	</form>
+	
+	<input type="hidden" th:value="${error}" id="hidden"></input>
+	<script src="http://code.jquery.com/jquery-latest.js"></script> 	
+	<script type="text/javascript">
+	$(document).ready(function(){
+		if(!$("#hidden").val()==""){
+			alert($("#hidden").val());
+		};
+	});
+	</script>
+	
+	
+</body>
+</html>
